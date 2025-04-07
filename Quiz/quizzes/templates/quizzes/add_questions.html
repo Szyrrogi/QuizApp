@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="quiz-questions-container">
+    <h1 class="quiz-questions-title">Dodaj pytania do quizu: {{ quiz.title }}</h1>
+
+    <div class="quiz-questions-form">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2 class="section-title">Nowe pytanie</h2>
+                <div class="form-group">
+                    <label for="{{ question_form.text.id_for_label }}">Treść pytania:</label>
+                    {{ question_form.text }}
+                    {% if question_form.text.errors %}
+                        <div class="error-message">{{ question_form.text.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-subtitle">Odpowiedzi</h3>
+                <div class="answers-grid">
+                    <div class="answer-item">
+                        <label class="answer-letter">A:</label>
+                        <div class="answer-content">
+                            {{ answer_form.text_A }}
+                            <label class="correct-answer">
+                                {{ answer_form.is_correct_A }}
+                                <span>Poprawna odpowiedź</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-item">
+                        <label class="answer-letter">B:</label>
+                        <div class="answer-content">
+                            {{ answer_form.text_B }}
+                            <label class="correct-answer">
+                                {{ answer_form.is_correct_B }}
+                                <span>Poprawna odpowiedź</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-item">
+                        <label class="answer-letter">C:</label>
+                        <div class="answer-content">
+                            {{ answer_form.text_C }}
+                            <label class="correct-answer">
+                                {{ answer_form.is_correct_C }}
+                                <span>Poprawna odpowiedź</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-item">
+                        <label class="answer-letter">D:</label>
+                        <div class="answer-content">
+                            {{ answer_form.text_D }}
+                            <label class="correct-answer">
+                                {{ answer_form.is_correct_D }}
+                                <span>Poprawna odpowiedź</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Dodaj pytanie
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="added-questions">
+        <h2 class="section-title">Dodane pytania</h2>
+        {% if questions %}
+            <ul class="questions-list">
+                {% for question in questions %}
+                <li class="question-item">
+                    <span class="question-text">{{ question.text }}</span>
+                    <span class="answers-count">
+                        ({{ question.answers.count }} odpowiedzi)
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-questions">Brak dodanych pytań</p>
+        {% endif %}
+    </div>
+
+    <div class="finish-section">
+        <a href="{% url 'quizzes:quiz_detail' quiz.id %}" class="btn btn-success">
+            <i class="fas fa-check-circle"></i> Zakończ tworzenie quizu
+        </a>
+    </div>
+</div>
+
+<style>
+.quiz-questions-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-questions-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.section-title {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.section-subtitle {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.answer-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.answer-letter {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 20px;
+}
+
+.answer-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.answer-content input[type="text"] {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.correct-answer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.added-questions {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.questions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.question-item {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.question-text {
+    font-weight: 500;
+}
+
+.answers-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.no-questions {
+    color: #666;
+    text-align: center;
+    padding: 1rem;
+}
+
+.finish-section {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .quiz-questions-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .answer-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}

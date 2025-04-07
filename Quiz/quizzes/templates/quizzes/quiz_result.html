@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load quiz_filters %}
+
+{% block content %}
+<div class="quiz-result">
+    <h1>Wynik quizu: {{ quiz.title }}</h1>
+    <div class="score-summary">
+        <p>Twój wynik: <strong>{{ score }}/{{ total }}</strong> ({{ percentage }}%)</p>
+        {% if percentage >= 75 %}
+        <p class="success-message">Świetny wynik!</p>
+        {% elif percentage >= 50 %}
+        <p class="warning-message">Nieźle, ale możesz lepiej!</p>
+        {% else %}
+        <p class="error-message">Warto powtórzyć materiał</p>
+        {% endif %}
+    </div>
+
+    <div class="answers-review">
+        <h2>Szczegółowe odpowiedzi:</h2>
+        {% for question in quiz.questions.all %}
+            {% with user_answer_id=user_answers|get_item:question.id %}
+            {% with correct_answer_id=correct_answers|get_item:question.id %}
+            <div class="question {% if user_answer_id == correct_answer_id|stringformat:'i' %}correct{% else %}incorrect{% endif %}">
+                <h3>Pytanie {{ forloop.counter }}: {{ question.text }}</h3>
+                
+                <ul class="answers-list">
+                    {% for answer in question.answers.all %}
+                    <li class="{% if answer.is_correct %}correct-answer{% endif %} {% if user_answer_id == answer.id|stringformat:'i' %}user-answer{% endif %}">
+                        {{ answer.letter }}) {{ answer.text }}
+                        {% if answer.is_correct %}
+                            <span class="correct-mark">✓ Poprawna odpowiedź</span>
+                        {% endif %}
+                        {% if user_answer_id == answer.id|stringformat:'i' and not answer.is_correct %}
+                            <span class="incorrect-mark">✗ Twoja odpowiedź</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+                {% if user_answer_id and user_answer_id != correct_answer_id|stringformat:'i' %}
+                <p class="correct-explanation">
+                    Poprawna odpowiedź to: 
+                    {% for answer in question.answers.all %}
+                        {% if answer.id == correct_answer_id %}{{ answer.letter }}) {{ answer.text }}{% endif %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+            {% endwith %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+    <div class="action-buttons">
+        <a href="{% url 'quizzes:quiz_list' %}" class="btn btn-primary">Powrót do listy quizów</a>
+        <a href="{% url 'quizzes:take_quiz' quiz.id %}" class="btn btn-secondary">Spróbuj jeszcze raz</a>
+    </div>
+</div>
+
+<style>
+.quiz-result {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.score-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.score-summary p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+.success-message {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.warning-message {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.error-message {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.answers-review {
+    margin-top: 30px;
+}
+
+.question {
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    border-left: 5px solid;
+}
+
+.question.correct {
+    background-color: #e8f5e9;
+    border-left-color: #28a745;
+}
+
+.question.incorrect {
+    background-color: #ffebee;
+    border-left-color: #dc3545;
+}
+
+.answers-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.answers-list li {
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 4px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.correct-answer {
+    border-left: 3px solid #28a745;
+}
+
+.user-answer {
+    font-weight: bold;
+}
+
+.correct-mark {
+    color: #28a745;
+    margin-left: 10px;
+}
+
+.incorrect-mark {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+.correct-explanation {
+    color: #28a745;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+</style>
+{% endblock %}

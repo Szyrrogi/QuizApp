@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1 class="quiz-title">{{ quiz.title }}</h1>
+    
+    {% if quiz.description %}
+    <p class="quiz-description">{{ quiz.description }}</p>
+    {% endif %}
+
+    <form method="post" class="quiz-form">
+        {% csrf_token %}
+        
+        {% for question in quiz.questions.all %}
+        <div class="question-card">
+            <div class="question-header">
+                <h2 class="question-text">Pytanie {{ forloop.counter }}</h2>
+                <p>{{ question.text }}</p>
+            </div>
+            
+            <div class="answers-container">
+                {% for answer in question.answers.all %}
+                <label class="answer-option">
+                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" required>
+                    <span class="answer-letter">{{ answer.letter }})</span>
+                    <span class="answer-text">{{ answer.text }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="submit-container">
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-check-circle"></i> Zakończ quiz
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.quiz-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.quiz-description {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.quiz-form {
+    margin-top: 2rem;
+}
+
+.question-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.question-card:hover {
+    transform: translateY(-2px);
+}
+
+.question-header {
+    margin-bottom: 1.5rem;
+}
+
+.question-text {
+    font-size: 1.2rem;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.answer-option:hover {
+    border-color: #3498db;
+    background-color: #f0f8ff;
+}
+
+.answer-option input[type="radio"] {
+    margin-right: 1rem;
+    transform: scale(1.2);
+}
+
+.answer-letter {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 20px;
+    margin-right: 0.5rem;
+}
+
+.answer-text {
+    flex-grow: 1;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.submit-btn {
+    padding: 0.8rem 2rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .quiz-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .question-card {
+        padding: 1rem;
+    }
+}
+</style>
+{% endblock %}

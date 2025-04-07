@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="quiz-detail">
+    <h1>{{ quiz.title }}</h1>
+    <p class="quiz-description">{{ quiz.description }}</p>
+    <p class="quiz-author">Autor: {{ quiz.created_by.username }}</p>
+    <p class="quiz-date">Utworzono: {{ quiz.created_at|date:"d.m.Y H:i" }}</p>
+
+    {% if is_owner %}
+    <div class="owner-actions">
+        <a href="{% url 'quizzes:edit_quiz' quiz.id %}" class="btn btn-edit">Edytuj quiz</a>
+        <form action="{% url 'quizzes:delete_quiz' quiz.id %}" method="post" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-delete">Usuń quiz</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'quizzes:take_quiz' quiz.id %}" class="btn btn-primary">Rozwiąż quiz</a>
+</div>
+
+<style>
+.quiz-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.quiz-author, .quiz-date {
+    color: #666;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.owner-actions {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+</style>
+{% endblock %}

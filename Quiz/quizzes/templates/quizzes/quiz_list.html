@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Dostępne quizy</h1>
+<ul class="quiz-list">
+    {% for quiz in quizzes %}
+    <li>
+        <a href="{% url 'quizzes:quiz_detail' quiz.id %}">
+            <h3>{{ quiz.title }}</h3>
+        </a>
+        <p>{{ quiz.description }}</p>
+    </li>
+    {% empty %}
+    <li>Brak dostępnych quizów</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+<a href="{% url 'quizzes:create_quiz' %}" class="btn">Stwórz nowy quiz</a>
+{% endif %}
+
+<style>
+.quiz-list {
+    list-style: none;
+    padding: 0;
+}
+.quiz-list li {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.quiz-list a {
+    text-decoration: none;
+    color: #333;
+}
+.quiz-list a:hover h3 {
+    color: #4CAF50;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+</style>
+{% endblock %}

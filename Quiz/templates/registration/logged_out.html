@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Wylogowano{% endblock %}
+
+{% block content %}
+<div class="logout-container">
+    <h2>Wylogowano pomyślnie</h2>
+    <div class="logout-message">
+        <p>Zostałeś poprawnie wylogowany z systemu.</p>
+    </div>
+    
+    <div class="logout-actions">
+        <a href="{% url 'login' %}" class="btn btn-login">Zaloguj ponownie</a>
+        <a href="{% url 'quizzes:quiz_list' %}" class="btn btn-home">Strona główna</a>
+    </div>
+</div>
+
+<style>
+.logout-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 2rem;
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logout-message {
+    margin: 1.5rem 0;
+}
+
+.logout-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: opacity 0.3s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-login {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-home {
+    background-color: #6c757d;
+    color: white;
+}
+</style>
+{% endblock %}
