@@ -1,0 +1,31 @@
+<!-- templates/404.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-container">
+    <h1>Strona nie istnieje (404)</h1>
+    <p>Nie znaleziono strony pod podanym adresem.</p>
+    <a href="{% url 'quizzes:quiz_list' %}" class="btn">
+        Powrót do strony głównej
+    </a>
+</div>
+
+<style>
+.error-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+}
+.error-container h1 {
+    color: #dc3545;
+}
+.btn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+</style>
+{% endblock %}

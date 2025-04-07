@@ -5,6 +5,9 @@ from .forms import QuizForm, QuestionForm, AnswerForm
 from django.contrib import messages
 
 
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
 @login_required
 def delete_quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id, created_by=request.user)

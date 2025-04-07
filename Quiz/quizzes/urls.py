@@ -23,6 +23,7 @@ urlpatterns = [
     
     # Usuwanie pytania
     path('quiz/<int:quiz_id>/question/<int:question_id>/delete/', views.delete_question, name='delete_question'),
+    
 
 
 

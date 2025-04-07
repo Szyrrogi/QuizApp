@@ -3,6 +3,8 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView  # Dodaj ten import
 from accounts.views import CustomLoginView, SignUpView
 
+handler404 = 'quizzes.views.handler404'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     

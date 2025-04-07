@@ -36,7 +36,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',  # For additional static files not in apps
 ]
-
+# settings.py
+DEBUG = False  # lub True podczas rozwoju
+ALLOWED_HOSTS = ['*']  # Tymczasowo zezwól na wszystkie hosty (dla testów)
 
 # Application definition
 
