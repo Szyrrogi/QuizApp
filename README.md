@@ -1,1 +1,1 @@
-Cały CSS został zrobiony przez AI, AI pomagało również z sporą częścią elementów HTML oraz pojedynczymi liniami w reszcie kodu
+Cały CSS został zrobiony przez AI, AI pomagało również z częścią elementów HTML oraz czasem w przypadku występowania błędów w całym kodzie
